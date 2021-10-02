@@ -5,9 +5,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hot_desk_app/login_page.dart';
 import 'package:hot_desk_app/profile_page.dart';
-import 'package:hot_desk_app/reservation_page.dart';
 import 'package:hot_desk_app/reservations_page.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import 'booking_page.dart';
 
 class LogedinPage extends StatefulWidget {
   const LogedinPage({Key? key}) : super(key: key);
@@ -179,7 +180,7 @@ class _LogedinPageState extends State<LogedinPage> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => ReservationPage(),
+                        builder: (context) => BookingPage(),
                       ),
                     );
                   },
