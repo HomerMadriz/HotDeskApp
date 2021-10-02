@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hot_desk_app/reservation_page.dart';
+import 'package:intl/intl.dart';
 
 class BookingPage extends StatefulWidget {
   BookingPage({Key? key}) : super(key: key);
@@ -58,7 +59,7 @@ class _BookingPageState extends State<BookingPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text('${selectedDate.toLocal()}'),
+                      Text(DateFormat('dd/MM/yyyy').format(selectedDate)),
                       const Icon(Icons.calendar_today_sharp)
                     ],
                   ),
@@ -96,7 +97,7 @@ class _BookingPageState extends State<BookingPage> {
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        Color.fromARGB(255, 255, 105, 167),
+                        const Color.fromARGB(255, 255, 105, 167),
                       ),
                     ),
                     onPressed: () {
