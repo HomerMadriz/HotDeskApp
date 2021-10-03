@@ -11,7 +11,8 @@ class BookingPage extends StatefulWidget {
 
 class _BookingPageState extends State<BookingPage> {
   DateTime selectedDate = DateTime.now();
-  int availableDesks = 10;
+  int availableDesks = 20;
+  int _tableSelected = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +69,38 @@ class _BookingPageState extends State<BookingPage> {
               const SizedBox(
                 height: 50,
               ),
-              const Image(
-                image: NetworkImage(
-                    'https://cdn.business2community.com/wp-content/uploads/2012/10/Officelayout-600x386.jpg'),
+              Expanded(
+                child: Container(
+                  color: Colors.white30,
+                  child: GridView.count(
+                    crossAxisCount: 4,
+                    childAspectRatio: 1.0,
+                    padding: const EdgeInsets.all(1.0),
+                    mainAxisSpacing: 4.0,
+                    crossAxisSpacing: 4.0,
+                    children: List<Widget>.generate(20, (index) {
+                      return GridTile(
+                        child: Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _tableSelected = index;
+                                });
+                              },
+                              icon: Icon(Icons.event_seat),
+                              iconSize: 40,
+                              color: _tableSelected == index
+                                  ? Colors.blue
+                                  : Colors.green,
+                            ),
+                            Text('Table ${index + 1}'),
+                          ],
+                        ),
+                      );
+                    }),
+                  ),
+                ),
               ),
               const SizedBox(
                 height: 50,
