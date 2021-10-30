@@ -4,8 +4,12 @@ class Reservation extends Equatable {
   final String? status;
   final String? desk;
   final DateTime? reservationDate;
+  final String? booking_id;
+  final String? user_id;
 
   const Reservation({
+    this.booking_id,
+    this.user_id,
     this.desk,
     this.reservationDate,
     this.status,
@@ -18,6 +22,8 @@ class Reservation extends Equatable {
       );
 
   Map<String, dynamic> toJson() => {
+        'booking_id': booking_id,
+        'user_id': user_id,
         'status': status,
         'desk': desk,
         'reservationDate': reservationDate,
@@ -26,6 +32,8 @@ class Reservation extends Equatable {
   @override
   List<Object?> get props {
     return [
+      booking_id,
+      user_id,
       status,
       desk,
       reservationDate,
