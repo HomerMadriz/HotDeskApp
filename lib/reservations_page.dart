@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:hot_desk_app/models/reservation.dart';
+import 'package:hot_desk_app/models/booking.dart';
 import 'package:hot_desk_app/reservation_page.dart';
 import 'package:intl/intl.dart';
 
@@ -13,23 +13,23 @@ class ReservationsPage extends StatefulWidget {
 }
 
 class _ReservationsPageState extends State<ReservationsPage> {
-  final List<Reservation> _reservations = [
-    Reservation(
+  final List<Booking> _reservations = [
+    Booking(
       desk: 'a35',
       reservationDate: DateTime(2021, 8, 3),
       status: 'Active',
     ),
-    Reservation(
+    Booking(
       desk: 'a33',
       reservationDate: DateTime(2021, 8, 1),
       status: 'Completed',
     ),
-    Reservation(
+    Booking(
       desk: 'a35',
       reservationDate: DateTime(2021, 7, 3),
       status: 'Cancelled',
     ),
-    Reservation(
+    Booking(
       desk: 'a35',
       reservationDate: DateTime(2021, 5, 3),
       status: 'Cancelled',
