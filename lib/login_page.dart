@@ -75,6 +75,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
+                        //  TODO: Authenticate user via Google
                         MaterialPageRoute(
                           builder: (context) => LogedinPage(),
                         ),

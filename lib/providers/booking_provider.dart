@@ -14,8 +14,8 @@ class BookingProvider with ChangeNotifier {
   Booking? get getBooking => _booking;
 
   // QueryDocumentSnapshot contiene objetos los tipo Booking que regresa el query
-  List<QueryDocumentSnapshot<Booking>>? _bookings;
-  List<QueryDocumentSnapshot<Booking>>? get getUsers => _bookings;
+  List<QueryDocumentSnapshot<Booking>>? _bookings = [];
+  List<QueryDocumentSnapshot<Booking>>? get getBookings => _bookings;
 
   void getAllBookings() async {
     _bookings = await _requestBookings();
@@ -93,12 +93,12 @@ class BookingProvider with ChangeNotifier {
     DateTime date,
     String status,
   ) async {
-    var firestoreTimestamp = date.toString().split(" ")[0].toString();
-
+    var firestoreTimestamp = Timestamp.fromDate(date);
+    //print('Timestamp: $firestoreTimestamp'); // DBUG
     try {
       return await _bookingRef
+          .where('date', isEqualTo: firestoreTimestamp)
           .where('status', isEqualTo: status)
-          .where('date', isGreaterThanOrEqualTo: firestoreTimestamp)
           .get()
           .then((value) => value.docs);
     } catch (e) {

@@ -3,42 +3,42 @@ import 'package:equatable/equatable.dart';
 class Booking extends Equatable {
   final String? status;
   final String? desk;
-  final DateTime? reservationDate;
-  final String? bookingId;
-  final String? userId;
+  final DateTime? date;
+  final String? id;
+  final String? user_id;
 
   const Booking({
-    this.bookingId,
-    this.userId,
+    this.id,
+    this.user_id,
     this.desk,
-    this.reservationDate,
+    this.date,
     this.status,
   });
 
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
         status: json['status'] as String?,
         desk: json['desk'] as String?,
-        reservationDate: json['reservationDate'] as DateTime?,
-        bookingId: json['bookingId'] as String?,
-        userId: json['userId'] as String?,
+        date: json['date'] as DateTime?,
+        id: json['id'] as String?,
+        user_id: json['user_id'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
-        'booking_id': bookingId,
-        'user_id': userId,
+        'id': id,
+        'user_id': user_id,
         'status': status,
         'desk': desk,
-        'reservationDate': reservationDate,
+        'date': date,
       };
 
   @override
   List<Object?> get props {
     return [
-      bookingId,
-      userId,
+      id,
+      user_id,
       status,
       desk,
-      reservationDate,
+      date,
     ];
   }
 }

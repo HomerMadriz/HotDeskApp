@@ -16,22 +16,22 @@ class _ReservationsPageState extends State<ReservationsPage> {
   final List<Booking> _reservations = [
     Booking(
       desk: 'a35',
-      reservationDate: DateTime(2021, 8, 3),
+      date: DateTime(2021, 8, 3),
       status: 'Active',
     ),
     Booking(
       desk: 'a33',
-      reservationDate: DateTime(2021, 8, 1),
+      date: DateTime(2021, 8, 1),
       status: 'Completed',
     ),
     Booking(
       desk: 'a35',
-      reservationDate: DateTime(2021, 7, 3),
+      date: DateTime(2021, 7, 3),
       status: 'Cancelled',
     ),
     Booking(
       desk: 'a35',
-      reservationDate: DateTime(2021, 5, 3),
+      date: DateTime(2021, 5, 3),
       status: 'Cancelled',
     ),
   ];
@@ -77,7 +77,7 @@ class _ReservationsPageState extends State<ReservationsPage> {
                         child: Text(_reservations[index].desk!),
                       ),
                       title: Text(
-                        'Reservation date: ${DateFormat('dd/MM/yyyy').format(_reservations[index].reservationDate!)}',
+                        'Reservation date: ${DateFormat('dd/MM/yyyy').format(_reservations[index].date!)}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),

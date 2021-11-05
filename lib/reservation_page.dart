@@ -2,12 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:hot_desk_app/logedin_page.dart';
+import 'package:intl/intl.dart';
 
 class ReservationPage extends StatelessWidget {
-  const ReservationPage({Key? key}) : super(key: key);
+  final date;
+  final desk;
+  // TODO: Pending until authentication is implemented
+  const ReservationPage({Key? key, @required this.date, @required this.desk})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    DateFormat formatter = DateFormat.yMd();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -59,7 +65,7 @@ class ReservationPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Date: 10/01/2021',
+                  'Date: ${formatter.format(date)}',
                   style:
                       TextStyle(fontFamily: 'Barlow-Regular', fontSize: 20.0),
                 ),
@@ -72,7 +78,7 @@ class ReservationPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Desk: A35',
+                  'Desk: Table $desk',
                   style:
                       TextStyle(fontFamily: 'Barlow-Regular', fontSize: 20.0),
                 ),
