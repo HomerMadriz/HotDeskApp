@@ -1,9 +1,13 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  final userInfo;
+  final lastReservation;
+  const ProfilePage(
+      {Key? key, @required this.userInfo, @required this.lastReservation})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +53,7 @@ class ProfilePage extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 115.0,
                       backgroundImage: NetworkImage(
-                        'https://randomuser.me/api/portraits/men/71.jpg',
+                        userInfo.profilePicture,
                       ),
                     ),
                   )
@@ -73,7 +77,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   subtitle: Center(
                     child: Text(
-                      'Dummy first name',
+                      userInfo.firstName,
                       style: TextStyle(
                         fontFamily: 'Barlow-Light',
                       ),
@@ -91,7 +95,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   subtitle: Center(
                     child: Text(
-                      'Dummy last name',
+                      userInfo.lastName,
                       style: TextStyle(
                         fontFamily: 'Barlow-Light',
                       ),
@@ -109,7 +113,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   subtitle: Center(
                     child: Text(
-                      'dummyemail@gmail.com',
+                      userInfo.email,
                       style: TextStyle(
                         fontFamily: 'Barlow-Light',
                       ),
@@ -119,7 +123,7 @@ class ProfilePage extends StatelessWidget {
                 ListTile(
                   title: Center(
                     child: Text(
-                      'Last reservation',
+                      'Upcoming reservation',
                       style: TextStyle(
                         fontFamily: 'Barlow-Bold',
                       ),
@@ -127,7 +131,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   subtitle: Center(
                     child: Text(
-                      'Mesa A35 - 25/09/2021',
+                      lastReservation,
                       style: TextStyle(
                         fontFamily: 'Barlow-Light',
                       ),

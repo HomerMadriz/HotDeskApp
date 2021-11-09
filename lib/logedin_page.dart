@@ -1,17 +1,20 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, await_only_futures
 
 import 'package:flutter/material.dart';
 import 'package:hot_desk_app/login_page.dart';
 import 'package:hot_desk_app/profile_page.dart';
 import 'package:hot_desk_app/providers/booking_provider.dart';
+import 'package:hot_desk_app/providers/user_provider.dart';
 import 'package:hot_desk_app/reservations_page.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'booking_page.dart';
 
 class LogedinPage extends StatefulWidget {
-  const LogedinPage({Key? key}) : super(key: key);
+  final userInfo;
+  const LogedinPage({Key? key, @required this.userInfo}) : super(key: key);
 
   @override
   State<LogedinPage> createState() => _LogedinPageState();
@@ -22,92 +25,121 @@ class _LogedinPageState extends State<LogedinPage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+
+  Future<String> getLastReservation(userID, bookingProvider) async {
+    await bookingProvider.getUserBookings(userID);
+    // Sort 'active' reservations
+    List bookings = bookingProvider.getBookings;
+
+    bookings = bookings.map((document) => document.data()).toList();
+    bookings.removeWhere((booking) => booking.status != 'Active');
+    bookings.sort((a, b) {
+      return a.date.compareTo(b.date);
+    });
+    if (bookings.isEmpty) {
+      return 'You don\'t have upcoming reservations';
+    }
+    String lastReservation =
+        '${bookings[0].desk} - ${DateFormat("dd/MM/yyyy").format(bookings[0].date)}'; // US format
+    return lastReservation;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.only(top: 50.0),
-          children: [
-            ListTile(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ProfilePage(),
+    return Consumer<BookingProvider>(
+        builder: (context, bookingProvider, child) {
+      return Scaffold(
+          endDrawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.only(top: 50.0),
+              children: [
+                ListTile(
+                  onTap: () async {
+                    String lastReservation = await getLastReservation(
+                        widget.userInfo.id, bookingProvider);
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(
+                            userInfo: widget.userInfo,
+                            lastReservation: lastReservation),
+                      ),
+                    );
+                  },
+                  leading: CircleAvatar(
+                    radius: 50.0,
+                    backgroundImage: NetworkImage(
+                      widget.userInfo.profilePicture,
+                    ),
                   ),
-                );
-              },
-              leading: CircleAvatar(
-                radius: 50.0,
-                backgroundImage: NetworkImage(
-                  'https://randomuser.me/api/portraits/men/71.jpg',
+                  title: Text(
+                    'View profile',
+                    style: TextStyle(fontFamily: 'Barlow-Regular'),
+                  ),
                 ),
-              ),
-              title: Text(
-                'View profile',
-                style: TextStyle(fontFamily: 'Barlow-Regular'),
-              ),
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ReservationsPage(),
+                ListTile(
+                  onTap: () {
+                    bookingProvider.getUserBookings(widget.userInfo.id);
+                    var reservations = bookingProvider.getBookings!
+                        .map((document) => document.data())
+                        .toList();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ReservationsPage(
+                            reservations: reservations,
+                            userInfo: widget.userInfo),
+                      ),
+                    );
+                  },
+                  title: Text(
+                    'View reservations',
+                    style: TextStyle(fontFamily: 'Barlow-Regular'),
                   ),
-                );
-              },
-              title: Text(
-                'View reservations',
-                style: TextStyle(fontFamily: 'Barlow-Regular'),
-              ),
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ),
+                    );
+                  },
+                  title: Text(
+                    'Log out',
+                    style: TextStyle(fontFamily: 'Barlow-Regular'),
                   ),
-                );
-              },
-              title: Text(
-                'Log out',
-                style: TextStyle(fontFamily: 'Barlow-Regular'),
-              ),
-            ),
-          ],
-        ),
-      ),
-      appBar: AppBar(
-        centerTitle: true,
-        iconTheme: IconThemeData(
-          color: Color.fromARGB(255, 255, 105, 167),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          'Hot Desk App',
-          style: TextStyle(
-            fontFamily: 'Barlow-Regular',
-            // ignore: todo
-            // TODO: Create a theme
-            color: Color.fromARGB(255, 255, 105, 167),
-          ),
-        ),
-      ),
-      body: Container(
-          constraints: BoxConstraints.expand(),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/appBackground.png'),
-              fit: BoxFit.cover,
+                ),
+              ],
             ),
           ),
-          child: Consumer<BookingProvider>(
-              builder: (context, bookingProvider, child) {
-            return Column(
+          appBar: AppBar(
+            centerTitle: true,
+            iconTheme: IconThemeData(
+              color: Color.fromARGB(255, 255, 105, 167),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: Text(
+              'Hot Desk App',
+              style: TextStyle(
+                fontFamily: 'Barlow-Regular',
+                // ignore: todo
+                // TODO: Create a theme
+                color: Color.fromARGB(255, 255, 105, 167),
+              ),
+            ),
+          ),
+          body: Container(
+            constraints: BoxConstraints.expand(),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/appBackground.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 TableCalendar(
@@ -203,12 +235,11 @@ class _LogedinPageState extends State<LogedinPage> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                     builder: (context) => BookingPage(
-                                          availableDesks: totalDesks -
-                                              bookingProvider
-                                                  .getBookings!.length,
-                                          date: _selectedDay!,
-                                          bookings: bookingProvider.getBookings,
-                                        )),
+                                        availableDesks: totalDesks -
+                                            bookingProvider.getBookings!.length,
+                                        date: _selectedDay!,
+                                        bookings: bookingProvider.getBookings,
+                                        userInfo: widget.userInfo)),
                               );
                             },
                       child: Padding(
@@ -227,8 +258,8 @@ class _LogedinPageState extends State<LogedinPage> {
                   ],
                 ),
               ],
-            );
-          })),
-    );
+            ),
+          ));
+    });
   }
 }

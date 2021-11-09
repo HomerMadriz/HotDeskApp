@@ -42,8 +42,9 @@ class BookingProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addNewBooking(Booking newBooking) async {
-    await _bookingRef.add(newBooking);
+  Future<DocumentReference<Booking>> addNewBooking(Booking newBooking) async {
+    DocumentReference<Booking> documentId = await _bookingRef.add(newBooking);
+    return documentId;
   }
 
   /// @param updateFields: Es un mapa donde se indica el nombre del campo a

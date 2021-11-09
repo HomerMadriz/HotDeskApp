@@ -19,10 +19,10 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void getUserById(String id) async {
-    _user = await _requestUser(id);
-    notifyListeners();
-  }
+  // void getUserById(String id) async {
+  //   _user = await _requestUser(id);
+  //   notifyListeners();
+  // }
 
   Future<List<QueryDocumentSnapshot<User>>?> _requestUsers() async {
     try {
@@ -33,7 +33,7 @@ class UserProvider with ChangeNotifier {
     }
   }
 
-  Future<User?> _requestUser(String id) async {
+  Future<User?> getUserById(String id) async {
     try {
       return _userRef.doc(id).get().then((value) => value.data()!);
     } catch (e) {

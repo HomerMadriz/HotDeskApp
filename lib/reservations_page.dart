@@ -6,35 +6,17 @@ import 'package:hot_desk_app/reservation_page.dart';
 import 'package:intl/intl.dart';
 
 class ReservationsPage extends StatefulWidget {
-  const ReservationsPage({Key? key}) : super(key: key);
+  final reservations;
+  final userInfo;
+  const ReservationsPage(
+      {Key? key, @required this.reservations, @required this.userInfo})
+      : super(key: key);
 
   @override
   State<ReservationsPage> createState() => _ReservationsPageState();
 }
 
 class _ReservationsPageState extends State<ReservationsPage> {
-  final List<Booking> _reservations = [
-    Booking(
-      desk: 'a35',
-      date: DateTime(2021, 8, 3),
-      status: 'Active',
-    ),
-    Booking(
-      desk: 'a33',
-      date: DateTime(2021, 8, 1),
-      status: 'Completed',
-    ),
-    Booking(
-      desk: 'a35',
-      date: DateTime(2021, 7, 3),
-      status: 'Cancelled',
-    ),
-    Booking(
-      desk: 'a35',
-      date: DateTime(2021, 5, 3),
-      status: 'Cancelled',
-    ),
-  ];
   final Map<String, Color> _statusColors = {
     'Active': Colors.lightGreen,
     'Completed': Colors.grey,
@@ -68,27 +50,32 @@ class _ReservationsPageState extends State<ReservationsPage> {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: _reservations.length,
+                itemCount: widget.reservations.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
-                    color: _statusColors[_reservations[index].status],
+                    color: _statusColors[widget.reservations[index].status],
                     child: ListTile(
                       leading: CircleAvatar(
-                        child: Text(_reservations[index].desk!),
+                        child: Text(widget.reservations[index].desk!),
                       ),
                       title: Text(
-                        'Reservation date: ${DateFormat('dd/MM/yyyy').format(_reservations[index].date!)}',
+                        'Reservation date: ${DateFormat('dd/MM/yyyy').format(widget.reservations[index].date!)}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      subtitle: Text(_reservations[index].status!),
-                      trailing: _reservations[index].status! == 'Active'
+                      subtitle: Text(widget.reservations[index].status!),
+                      trailing: widget.reservations[index].status! == 'Active'
                           ? IconButton(
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => ReservationPage(),
+                                    builder: (context) => ReservationPage(
+                                        date: widget.reservations[index].date,
+                                        desk: widget.reservations[index].desk,
+                                        displayReturnArrow: true,
+                                        docId: widget.reservations[index].id,
+                                        userInfo: widget.userInfo),
                                   ),
                                 );
                               },

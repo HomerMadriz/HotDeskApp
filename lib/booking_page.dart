@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class BookingPage extends StatefulWidget {
+  final userInfo;
   final DateTime? date;
   final availableDesks;
   final bookings;
@@ -15,7 +16,8 @@ class BookingPage extends StatefulWidget {
       {Key? key,
       @required this.date,
       @required this.availableDesks,
-      @required this.bookings})
+      @required this.bookings,
+      @required this.userInfo})
       : super(key: key);
 
   @override
@@ -23,6 +25,7 @@ class BookingPage extends StatefulWidget {
 }
 
 class _BookingPageState extends State<BookingPage> {
+  var newDocumentId;
   DateFormat formatter = DateFormat.yMMMMd(
       'en_US'); // For future refference: https://api.flutter.dev/flutter/intl/DateFormat-class.html
   DateTime selectedDate = DateTime.now();
@@ -165,23 +168,32 @@ class _BookingPageState extends State<BookingPage> {
                         ),
                         onPressed: _tableSelected == -1
                             ? null
-                            : () {
+                            : () async {
                                 // Create new reservation
                                 Booking reservation = Booking(
-                                  id: "",
-                                  user_id: "",
+                                  id: "x",
+                                  user_id:
+                                      "NLPzxRNQpAZNnHXWQ93l", // TODO: Remove hardcoded user id
                                   desk: 'Table ${_tableSelected + 1}',
                                   date: widget.date!
                                       .add(Duration(hours: 6)), // UTC-6
                                   status: 'Active',
                                 );
-                                bookingProvider.addNewBooking(reservation);
+                                newDocumentId = await bookingProvider
+                                    .addNewBooking(reservation);
+                                newDocumentId = newDocumentId.id;
+                                // Update reservation with documentId
+                                await bookingProvider.updateBooking(
+                                    newDocumentId, {'id': newDocumentId});
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => ReservationPage(
-                                      date: widget.date,
-                                      desk: _tableSelected + 1,
-                                    ),
+                                        date: widget.date,
+                                        desk: _tableSelected + 1,
+                                        docId: newDocumentId,
+                                        displayReturnArrow: false,
+                                        userInfo: widget
+                                            .userInfo), // TODO: Remove hardcoved user id
                                   ),
                                 );
                               },

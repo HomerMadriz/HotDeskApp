@@ -18,7 +18,7 @@ class Booking extends Equatable {
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
         status: json['status'] as String?,
         desk: json['desk'] as String?,
-        date: json['date'] as DateTime?,
+        date: json['date'].toDate() as DateTime?,
         id: json['id'] as String?,
         user_id: json['user_id'] as String?,
       );
