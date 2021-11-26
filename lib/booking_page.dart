@@ -171,10 +171,9 @@ class _BookingPageState extends State<BookingPage> {
                             : () async {
                                 // Create new reservation
                                 Booking reservation = Booking(
-                                  id: "x",
-                                  user_id:
-                                      "NLPzxRNQpAZNnHXWQ93l", // TODO: Remove hardcoded user id
-                                  desk: 'Table ${_tableSelected + 1}',
+                                  user_id: widget.userInfo
+                                      .id, // TODO: Remove hardcoded user id
+                                  desk: '${_tableSelected + 1}',
                                   date: widget.date!
                                       .add(Duration(hours: 6)), // UTC-6
                                   status: 'Active',
@@ -192,8 +191,7 @@ class _BookingPageState extends State<BookingPage> {
                                         desk: _tableSelected + 1,
                                         docId: newDocumentId,
                                         displayReturnArrow: false,
-                                        userInfo: widget
-                                            .userInfo), // TODO: Remove hardcoved user id
+                                        userInfo: widget.userInfo),
                                   ),
                                 );
                               },

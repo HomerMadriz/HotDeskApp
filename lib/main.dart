@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hot_desk_app/login_page.dart';
 import 'package:hot_desk_app/providers/booking_provider.dart';
+import 'package:hot_desk_app/providers/google_sign_in.dart';
 import 'package:hot_desk_app/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,10 @@ void main() async {
       ChangeNotifierProvider(create: (context) => UserProvider()),
       ChangeNotifierProvider(
         create: (context) => BookingProvider(),
-      )
+      ),
+      ChangeNotifierProvider(
+        create: (context) => GoogleSignInProvider(),
+      ),
     ],
     child: (MyApp()),
   ));

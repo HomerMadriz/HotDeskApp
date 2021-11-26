@@ -66,7 +66,7 @@ class ReservationPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image(
-                          height: 200,
+                          height: 150,
                           image: NetworkImage(
                               'https://www.kaspersky.es/content/es-es/images/repository/isc/2020/9910/a-guide-to-qr-codes-and-how-to-scan-qr-codes-2.png'),
                         )
@@ -118,38 +118,42 @@ class ReservationPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          minimumSize:
-                              MaterialStateProperty.all(Size(250.0, 50.0)),
-                          backgroundColor: MaterialStateProperty.all(
-                            Colors.green,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => LogedinPage(
-                                userInfo: userInfo,
+                      displayReturnArrow
+                          ? SizedBox(
+                              height: 0.0,
+                            )
+                          : ElevatedButton(
+                              style: ButtonStyle(
+                                minimumSize: MaterialStateProperty.all(
+                                    Size(250.0, 50.0)),
+                                backgroundColor: MaterialStateProperty.all(
+                                  Colors.green,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => LogedinPage(
+                                      userInfo: userInfo,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.all(10.0),
+                                child: Text(
+                                  displayReturnArrow
+                                      ? 'Edit reservation'
+                                      : 'New reservation',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Barlow-Regular',
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
                               ),
                             ),
-                          );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            displayReturnArrow
-                                ? 'Edit reservation'
-                                : 'New reservation',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Barlow-Regular',
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                   SizedBox(

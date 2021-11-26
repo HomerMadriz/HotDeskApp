@@ -1,9 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, await_only_futures
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, await_only_futures, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'package:hot_desk_app/login_page.dart';
 import 'package:hot_desk_app/profile_page.dart';
 import 'package:hot_desk_app/providers/booking_provider.dart';
+import 'package:hot_desk_app/providers/google_sign_in.dart';
 import 'package:hot_desk_app/providers/user_provider.dart';
 import 'package:hot_desk_app/reservations_page.dart';
 import 'package:intl/intl.dart';
@@ -46,6 +47,13 @@ class _LogedinPageState extends State<LogedinPage> {
 
   @override
   Widget build(BuildContext context) {
+    EdgeInsets padding = MediaQuery.of(context).padding;
+    double width = MediaQuery.of(context).size.width;
+    double height =
+        MediaQuery.of(context).size.height - padding.top - padding.bottom;
+    double vw = width / 100;
+    double vh = height / 100;
+
     return Consumer<BookingProvider>(
         builder: (context, bookingProvider, child) {
       return Scaffold(
@@ -79,11 +87,11 @@ class _LogedinPageState extends State<LogedinPage> {
                 ),
                 ListTile(
                   onTap: () {
+                    Navigator.of(context).pop();
                     bookingProvider.getUserBookings(widget.userInfo.id);
                     var reservations = bookingProvider.getBookings!
                         .map((document) => document.data())
                         .toList();
-                    Navigator.of(context).pop();
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => ReservationsPage(
@@ -100,11 +108,15 @@ class _LogedinPageState extends State<LogedinPage> {
                 ListTile(
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => LoginPage(),
-                      ),
-                    );
+                    final provider = Provider.of<GoogleSignInProvider>(context,
+                        listen: false);
+                    provider.logout();
+
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => LoginPage(),
+                    //   ),
+                    // );
                   },
                   title: Text(
                     'Log out',
@@ -143,6 +155,8 @@ class _LogedinPageState extends State<LogedinPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TableCalendar(
+                  rowHeight: 40.0,
+                  daysOfWeekHeight: 16.0,
                   firstDay: DateTime
                       .now(), // User can only schedule in range today - 61 (2 months) later
                   lastDay: DateTime.now().add(Duration(days: 61)),

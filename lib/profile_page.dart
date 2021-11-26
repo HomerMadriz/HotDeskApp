@@ -48,7 +48,7 @@ class ProfilePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 120.0,
+                    radius: 80.0,
                     backgroundColor: Color.fromARGB(255, 255, 105, 167),
                     child: CircleAvatar(
                       radius: 115.0,
